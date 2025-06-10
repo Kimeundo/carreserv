@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>차량 예약 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .admin-hidden {
+            display: none;
+        }
+        select option {
+            background-color: white;
+            color: #1f2937;
+            padding: 8px;
+        }
+        select {
+            background-color: white;
+            color: #1f2937;
+        }
+        .account-number {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .account-number:hover {
+            background-color: #f3f4f6;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- 메인 예약 페이지 -->
+    <div id="reservation-page" class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto glass-effect rounded-2xl shadow-2xl p-8">
+            <!-- 헤더 -->
+            <div class="text-center mb-8">
+                <h1 id="site-title" class="text-4xl font-bold text-gray-800 mb-2">
+                    <i class="fas fa-car text-blue-600"></i> 차량 예약 시스템
+                </h1>
+                <p id="site-subtitle" class="text-gray-600">편리하고 안전한 차량 예약 서비스</p>
+            </div>
+
+            <!-- 예약 폼 -->
+            <form action="https://formspree.io/f/meokavrg" method="POST" class="space-y-6">
+                <!-- 예약자 정보 -->
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-user text-blue-600"></i> 예약자 정보
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">이름 *</label>
+                            <input type="text" name="name" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">연락처 *</label>
+                            <input type="tel" name="phone" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">이메일 *</label>
+                        <input type="email" name="email" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- 예약 정보 -->
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-calendar text-green-600"></i> 예약 정보
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">예약 날짜 *</label>
+                            <input type="date" name="date" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">예약 시간 *</label>
+                            <select name="time" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white">
+                                <option value="">시간 선택</option>
+                                <option value="09:00">09:00</option>
+                                <option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option>
+                                <option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option>
+                                <option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option>
+                                <option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option>
+                                <option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option>
+                                <option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option>
+                                <option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option>
+                                <option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option>
+                                <option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">차량 종류 *</label>
+                            <select name="carType" required id="car-type-select"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white">
+                                <option value="">차량 선택</option>
+                                <option value="소형차">소형차 (모닝, 스파크 등)</option>
+                                <option value="중형차">중형차 (아반떼, K3 등)</option>
+                                <option value="대형차">대형차 (그랜저, K7 등)</option>
+                                <option value="SUV">SUV (투싼, 스포티지 등)</option>
+                                <option value="승합차">승합차 (스타렉스, 카니발 등)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">목적지</label>
+                            <input type="text" name="destination" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 특별 요청 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">특별 요청사항</label>
+                    <textarea name="requests" rows="3" 
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+
+                <!-- 예약금 정보 -->
+                <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-400">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                        <i class="fas fa-credit-card text-yellow-600"></i> 예약금 안내
+                    </h3>
+                    <div class="space-y-2">
+                        <p><strong>예약금:</strong> <span id="reservation-fee" class="text-xl font-bold text-red-600">100,000원</span></p>
+                        <p><strong>은행:</strong> <span id="bank-name">카카오뱅크</span></p>
+                        <p><strong>계좌번호:</strong> 
+                            <span id="account-number" class="account-number bg-gray-100 px-3 py-1 rounded font-mono font-bold">3333-044-330118</span>
+                            <button type="button" onclick="copyAccount()" class="ml-2 text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-copy"></i> 복사
+                            </button>
+                        </p>
+                        <p><strong>예금주:</strong> <span id="account-holder">김은도</span></p>
+                    </div>
+                </div>
+
+                <!-- 제출 버튼 -->
+                <button type="submit" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition duration-300 transform hover:scale-105">
+                    <i class="fas fa-paper-plane mr-2"></i>예약 신청하기
+                </button>
+            </form>
+
+            <!-- 연락처 정보 -->
+            <div class="mt-8 bg-gray-50 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                    <i class="fas fa-phone text-gray-600"></i> 문의사항
+                </h3>
+                <div class="space-y-1 text-gray-600">
+                    <p><strong>전화:</strong> <span id="contact-phone">010-0000-0000</span></p>
+                    <p><strong>이메일:</strong> <span id="contact-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b8d1d6ded7f8ddc0d9d5c8d4dd96dbd7d5">[email&#160;protected]</a></span></p>
+                </div>
+            </div>
+
+            <!-- 관리자 버튼 -->
+            <div class="mt-8 text-center">
+                <button onclick="showAdminLogin()" 
+                        class="text-gray-500 hover:text-gray-700 text-sm underline">
+                    <i class="fas fa-cog mr-1"></i>관리자 페이지
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 로그인 모달 -->
+    <div id="admin-login-modal" class="admin-hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-2xl">
+            <h3 class="text-xl font-bold mb-4">관리자 로그인</h3>
+            <input type="password" id="admin-password" placeholder="비밀번호를 입력하세요" 
+                   class="w-full px-4 py-2 border rounded-lg mb-4">
+            <div class="flex space-x-4">
+                <button onclick="adminLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    로그인
+                </button>
+                <button onclick="closeAdminLogin()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                    취소
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 페이지 -->
+    <div id="admin-page" class="admin-hidden container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-2xl p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">
+                    <i class="fas fa-cogs text-blue-600"></i> 관리자 페이지
+                </h1>
+                <button onclick="showReservationPage()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-arrow-left mr-2"></i>메인으로
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 기본 정보 -->
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4">기본 정보</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">사이트 제목</label>
+                            <input type="text" id="admin-title" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">부제목</label>
+                            <input type="text" id="admin-subtitle" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 결제 정보 -->
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4">결제 정보</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">은행명</label>
+                            <input type="text" id="admin-bank" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">계좌번호</label>
+                            <input type="text" id="admin-account" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">예금주</label>
+                            <input type="text" id="admin-holder" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">예약금</label>
+                            <input type="text" id="admin-fee" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 연락처 정보 -->
+                <div class="bg-yellow-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4">연락처 정보</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">전화번호</label>
+                            <input type="text" id="admin-phone" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">이메일</label>
+                            <input type="text" id="admin-email" class="w-full px-3 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 차량 관리 -->
+                <div class="bg-purple-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4">차량 종류 관리</h3>
+                    <div class="space-y-2">
+                        <div id="car-types-list"></div>
+                        <button onclick="addCarType()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 mt-4">
+                            차량 추가
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="saveSettings()" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 text-lg font-semibold">
+                    <i class="fas fa-save mr-2"></i>설정 저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // 기본 설정값
+        let settings = {
+            title: "차량 예약 시스템",
+            subtitle: "편리하고 안전한 차량 예약 서비스",
+            bankName: "카카오뱅크",
+            accountNumber: "3333-044-330118",
+            accountHolder: "김은도",
+            reservationFee: "100,000원",
+            contactPhone: "010-0000-0000",
+            contactEmail: "info@example.com",
+            carTypes: [
+                "소형차 (모닝, 스파크 등)",
+                "중형차 (아반떼, K3 등)",
+                "대형차 (그랜저, K7 등)",
+                "SUV (투싼, 스포티지 등)",
+                "승합차 (스타렉스, 카니발 등)"
+            ]
+        };
+
+        // 로컬 스토리지에서 설정 로드
+        function loadSettings() {
+            const saved = localStorage.getItem('reservationSettings');
+            if (saved) {
+                settings = {...settings, ...JSON.parse(saved)};
+            }
+            applySettings();
+        }
+
+        // 설정 적용
+        function applySettings() {
+            document.getElementById('site-title').innerHTML = `<i class="fas fa-car text-blue-600"></i> ${settings.title}`;
+            document.getElementById('site-subtitle').textContent = settings.subtitle;
+            document.getElementById('bank-name').textContent = settings.bankName;
+            document.getElementById('account-number').textContent = settings.accountNumber;
+            document.getElementById('account-holder').textContent = settings.accountHolder;
+            document.getElementById('reservation-fee').textContent = settings.reservationFee;
+            document.getElementById('contact-phone').textContent = settings.contactPhone;
+            document.getElementById('contact-email').textContent = settings.contactEmail;
+            updateCarTypes();
+        }
+
+        // 차량 종류 업데이트
+        function updateCarTypes() {
+            const select = document.getElementById('car-type-select');
+            select.innerHTML = '<option value="">차량 선택</option>';
+            settings.carTypes.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type.split(' ')[0];
+                option.textContent = type;
+                select.appendChild(option);
+            });
+        }
+
+        // 계좌번호 복사
+        function copyAccount() {
+            navigator.clipboard.writeText(settings.accountNumber).then(() => {
+                alert('계좌번호가 복사되었습니다!');
+            });
+        }
+
+        // 관리자 로그인 모달 표시
+        function showAdminLogin() {
+            document.getElementById('admin-login-modal').classList.remove('admin-hidden');
+        }
+
+        // 관리자 로그인 모달 닫기
+        function closeAdminLogin() {
+            document.getElementById('admin-login-modal').classList.add('admin-hidden');
+            document.getElementById('admin-password').value = '';
+        }
+
+        // 관리자 로그인
+        function adminLogin() {
+            const password = document.getElementById('admin-password').value;
+            if (password === '1234') {
+                closeAdminLogin();
+                showAdminPage();
+            } else {
+                alert('비밀번호가 틀렸습니다!');
+            }
+        }
+
+        // 관리자 페이지 표시
+        function showAdminPage() {
+            document.getElementById('reservation-page').classList.add('admin-hidden');
+            document.getElementById('admin-page').classList.remove('admin-hidden');
+            loadAdminForm();
+        }
+
+        // 예약 페이지 표시
+        function showReservationPage() {
+            document.getElementById('admin-page').classList.add('admin-hidden');
+            document.getElementById('reservation-page').classList.remove('admin-hidden');
+        }
+
+        // 관리자 폼 로드
+        function loadAdminForm() {
+            document.getElementById('admin-title').value = settings.title;
+            document.getElementById('admin-subtitle').value = settings.subtitle;
+            document.getElementById('admin-bank').value = settings.bankName;
+            document.getElementById('admin-account').value = settings.accountNumber;
+            document.getElementById('admin-holder').value = settings.accountHolder;
+            document.getElementById('admin-fee').value = settings.reservationFee;
+            document.getElementById('admin-phone').value = settings.contactPhone;
+            document.getElementById('admin-email').value = settings.contactEmail;
+            loadCarTypesList();
+        }
+
+        // 차량 목록 로드
+        function loadCarTypesList() {
+            const list = document.getElementById('car-types-list');
+            list.innerHTML = '';
+            settings.carTypes.forEach((type, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center space-x-2 mb-2';
+                div.innerHTML = `
+                    <input type="text" value="${type}" class="flex-1 px-3 py-1 border rounded" onchange="updateCarType(${index}, this.value)">
+                    <button onclick="removeCarType(${index})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">삭제</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // 차량 종류 추가
+        function addCarType() {
+            settings.carTypes.push('새 차량');
+            loadCarTypesList();
+        }
+
+        // 차량 종류 수정
+        function updateCarType(index, value) {
+            settings.carTypes[index] = value;
+        }
+
+        // 차량 종류 삭제
+        function removeCarType(index) {
+            settings.carTypes.splice(index, 1);
+            loadCarTypesList();
+        }
+
+        // 설정 저장
+        function saveSettings() {
+            settings.title = document.getElementById('admin-title').value;
+            settings.subtitle = document.getElementById('admin-subtitle').value;
+            settings.bankName = document.getElementById('admin-bank').value;
+            settings.accountNumber = document.getElementById('admin-account').value;
+            settings.accountHolder = document.getElementById('admin-holder').value;
+            settings.reservationFee = document.getElementById('admin-fee').value;
+            settings.contactPhone = document.getElementById('admin-phone').value;
+            settings.contactEmail = document.getElementById('admin-email').value;
+
+            localStorage.setItem('reservationSettings', JSON.stringify(settings));
+            applySettings();
+            alert('설정이 저장되었습니다!');
+        }
+
+        // 페이지 로드 시 설정 적용
+        document.addEventListener('DOMContentLoaded', loadSettings);
+
+        // Enter 키로 관리자 로그인
+        document.getElementById('admin-password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                adminLogin();
+            }
+        });
+    </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"94d789bc28fcfcd2","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.5.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDjhcpO9u0sxrwk%2BpBSsP532pw5bGIlgL%2Bh9Mjm6iHlkv96ikeAF4WaECTEO%2B2TW0PYdb%2BGb5jCoTLGMY0tSKzHEWcwfpKgL4Gbsd1asYFgv8FUBu%2FmgmRFIZwD1s01K2R5UiflQo%2FQzWrwUzDbnpRNnhHLxpwGX34K39LGoOt%2BH71xqtJAkLzRDlVaA7Ok%2ByYMqIYUmEwSpQLOR8MCLDJcG7K2EcaTnkioP6Y8ZSeqU8r5oBdCW3J5HRf8vjGAue%2FZcFyGAiiDKpGrZ3k87MDprN8iP9an4srzlaPygdif7tvQDqQ3Tpy3BxlrHj11TZAv7XE0nIdphNg73ziSY84yyltm72jJ4lCeXNsxXAsGlD0bYQguz2%2B1FsURL9SuRztdgHC%2B2TqjG682qnE6iZh%2FDJSISKjGT5sK3RbFhNyrJ1QA%2BaehI8%2FgvSqMyAtEOmqatwIYULGj8WA9Jq6DHSqMks1m5Vx%2BWWXGJza8O%2FFvao1tsA8vfXYBykMf1uGGpPniTsvmpfVRDWfTJfhcdEZDg%3D";
+        window.__genspark_locale = "ko-KR";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDjhcpO9u0sxrwk+pBSsP532pw5bGIlgL+h9Mjm6iHlkv96ikeAF4WaECTEO+2TW0PYdb+Gb5jCoTLGMY0tSKzHEWcwfpKgL4Gbsd1asYFgv8FUBu/mgmRFIZwD1s01K2R5UiflQo/QzWrwUzDbnpRNnhHLxpwGX34K39LGoOt+H71xqtJAkLzRDlVaA7Ok+yYMqIYUmEwSpQLOR8MCLDJcG7K2EcaTnkioP6Y8ZSeqU8r5oBdCW3J5HRf8vjGAue/ZcFyGAiiDKpGrZ3k87MDprN8iP9an4srzlaPygdif7tvQDqQ3Tpy3BxlrHj11TZAv7XE0nIdphNg73ziSY84yyltm72jJ4lCeXNsxXAsGlD0bYQguz2+1FsURL9SuRztdgHC+2TqjG682qnE6iZh/DJSISKjGT5sK3RbFhNyrJ1QA+aehI8/gvSqMyAtEOmqatwIYULGj8WA9Jq6DHSqMks1m5Vx+WWXGJza8O/Fvao1tsA8vfXYBykMf1uGGpPniTsvmpfVRDWfTJfhcdEZDg=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
